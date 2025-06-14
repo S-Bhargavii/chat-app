@@ -75,8 +75,13 @@ export const login = async (req, res) => {
 
 export const logout = (req, res) => {
     try{
-        
+        // we are deleting the jwt cookie by first assigning it a blank value
+        // and then making use of the maxage = 0 to delete itself
+        // once it is expired
+        res.cookie("jwt", "", {maxAge: 0})
+        return res.status(200).json({message: "Logged out successfully"})
     }catch(error){
         console.log(`Error occured during logout : ${error}`);
+        return res.status(500).json({message: "Internal server error"});
     }
 }
