@@ -30,7 +30,7 @@ export const signup = async (req, res) => {
             // generate jwt token
             generateToken(newUser._id, res);
             await newUser.save(); // save to the users database
-            res.status(201).json({
+            res.status(200).json({
                 _id: newUser._id, 
                 fullName: newUser.fullName,
                 email: newUser.email,
@@ -46,17 +46,36 @@ export const signup = async (req, res) => {
     }
 }
 
-export const login = (req, res) => {
+export const login = async (req, res) => {
+    const {email, password} = req.body;
     try{
+        const user = await User.findOne({email});
 
+        if (!user){
+            return res.status(400).json({message: "No user exists with that email"});
+        }
+
+        // is user exists 
+        const isCorrectPassword = await bcrypt.compare(password, user.hashedPassword);
+        if(!isCorrectPassword){
+            return res.status(400).json({message: "Incorrect password"})
+        }
+        generateToken(user._id, res);
+        res.status(200).json({
+            _id: user._id, 
+            fullName: user.fullName,
+            email: user.email,
+            profilePic: user.profilePic
+        })
     }catch(error){
         console.log(`Error occured during login : ${error}`);
+        return res.status(500).json({message: "Internal server error"});
     }
 }
 
 export const logout = (req, res) => {
     try{
-
+        
     }catch(error){
         console.log(`Error occured during logout : ${error}`);
     }
