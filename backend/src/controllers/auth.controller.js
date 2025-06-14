@@ -43,7 +43,7 @@ export const signup = async (req, res) => {
 
     }catch(error){
         console.log(`Error occured during signup : ${error}`);
-        return res.status(500).json({message: "Internal server error"});
+        return res.status(500).json({error: "Internal server error occured"});
     }
 }
 
@@ -70,7 +70,7 @@ export const login = async (req, res) => {
         })
     }catch(error){
         console.log(`Error occured during login : ${error}`);
-        return res.status(500).json({message: "Internal server error"});
+        return res.status(500).json({error: "Internal server error occured"});
     }
 }
 
@@ -83,7 +83,7 @@ export const logout = (req, res) => {
         return res.status(200).json({message: "Logged out successfully"})
     }catch(error){
         console.log(`Error occured during logout : ${error}`);
-        return res.status(500).json({message: "Internal server error"});
+        return res.status(500).json({error: "Internal server error occured"});
     }
 }
 
@@ -104,8 +104,7 @@ export const updateProfile = async(req, res) => {
 
     } catch(error){
         console.log("An error occured when uploading profile picture");
-        return res.status(500).json({message: "Internal server error occured."});
-
+        return res.status(500).json({error: "Internal server error occured"});
     }
 }
 
@@ -117,6 +116,6 @@ export const checkAuth = (req, res) => {
     res.status(200).json(req.user);
    }catch(error){
     console.log("Error in checkauth controller", error.message);
-    res.status(500).json({message: "Internal server error occured."});
+    return res.status(500).json({error: "Internal server error occured"});
    }
 }
