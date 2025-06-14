@@ -1,5 +1,5 @@
 import express from "express" // this imports the express libary and the import is assigned to express variable 
-import router from "./routes/auth.route.js";
+import authRoutes from "./routes/auth.route.js" ;
 
 const app = express(); 
 
