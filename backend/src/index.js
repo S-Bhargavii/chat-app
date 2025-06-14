@@ -1,6 +1,9 @@
-import express from "express" // this imports the express libary and the import is assigned to express variable 
+// this is the entry point of our app
+
+import express from "express"
 import authRoutes from "./routes/auth.route.js" ;
 import dotenv from "dotenv";
+import { connectDB } from "./models/db.js";
 
 const app = express(); 
 dotenv.config(); 
@@ -12,5 +15,6 @@ app.listen(
     port,
     ()=>{
         console.log(`server is running on port :` + port);
+        connectDB();
     }
 )
