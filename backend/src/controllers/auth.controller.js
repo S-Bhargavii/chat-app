@@ -1,6 +1,7 @@
 import User from "../models/user.model.js"
 import bcrypt from "bcrypt"
 import { generateToken } from "../lib/utils.js";
+import cloudinary from "../lib/cloudinary.js";
 
 export const signup = async (req, res) => {
     const {fullName, email, password} = req.body;
@@ -87,5 +88,23 @@ export const logout = (req, res) => {
 }
 
 export const updateProfile = async(req, res) => {
-    
+    try{
+        const {profilePic} = req.body;
+        const userId = req.user._id; // the user has been added into the request body by the protect route middleware 
+
+        if(!profilePic){
+            return res.status(400).json({message: "Profile pic is required"});
+        }
+
+        // cloudinary is simply like a bucket that stores the images
+        // the link to the image will be saved in the mongodb database
+        const uploadResponse = await cloudinary.uploader.upload(profilePic);
+        const updatedUser = await User.findByIdAndUpdate(userId, {profilePic: uploadResponse.secure_url}, {new:true});
+        return res.status(200).json(updatedUser);
+        
+    } catch(error){
+        console.log("An error occured when uploading profile picture");
+        return res.status(500).json({message: "Internal server error occured."});
+
+    }
 }
