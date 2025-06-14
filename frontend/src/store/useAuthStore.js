@@ -12,6 +12,7 @@ export const useAuthStore = create((set)=> ({
     isLoggingIn: false,
     isUpdatingProfile: false,
     isCheckingAuth: true,
+
     checkAuth: async() => {
         try{
             const res = await axiosInstance.get("/auth/check-auth"); // the axiosinstance alr prefixed with /api (see baseurl)
@@ -24,5 +25,9 @@ export const useAuthStore = create((set)=> ({
             // by using states, react will re-render any component 
             // that uses the state.
         }
+    },
+
+    signup: async() => {
+        console.log("Hello")
     }
 }))
