@@ -28,6 +28,20 @@ export const useAuthStore = create((set)=> ({
         }
     },
 
+    login: async(data) => {
+        set({isLoggingIn:true});
+        try{
+            const response = await axiosInstance.post("/auth/login", data);
+            set({authUser: response.data});
+            toast.success("User logged in successfully");
+        } catch(error){
+            console.log("An error occured when making a login request to teh backend api")
+            toast.error(error.response.data.message);
+        } finally{
+            set({isLoggingIn: false});
+        }
+    },
+
     signup: async(data) => {
         set({isSigningUp: true}); // you can modify only part of the entire state object 
 
