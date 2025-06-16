@@ -3,6 +3,7 @@ import { useAuthStore } from "../store/useAuthStore";
 import {EyeOff, MessageSquare, Eye, Loader2} from "lucide-react";
 import { Link } from "react-router-dom";
 import AuthImagePattern from "../components/AuthImagePattern";
+import toast from "react-hot-toast";
 
 const SignUpPage = () => {
   const [showPassword, setShowPassword] = useState(false); 
@@ -15,11 +16,33 @@ const SignUpPage = () => {
 
   const {signup, isSigningUp} = useAuthStore();
   const validateForm = () => {
-    
+  
+    // check if the name is provided
+    if(!formData.fullName.trim()) return toast.error("Full name is required");
+
+    // check if the email is provided
+    if(!formData.email.trim()) return toast.error("Email is required");
+
+    // check if the email is valid 
+    if(!/\S+@\S+\.\S+/.test(formData.email)) return toast.error("Invalid email format");
+
+    // check if password is provided
+    if(!formData.password.trim()) return toast.error("Password is required");
+
+    // check if password is less than 6 chars 
+    if(formData.password.length < 6) return toast.error("Password must be atleast 6 characters");
+
+    return true;
   }
 
   const handleSubmit = (e) => {
-    e.preventDefault()
+    console.log("Inside the handle subkit");
+    e.preventDefault() // prevent page reloading 
+
+    const success = validateForm();
+    if(success===true){
+        signup(formData);
+    }
   }
 
   return (
