@@ -26,7 +26,6 @@ const Sidebar = () => {
             <div className="overflow-y-auto w-full py-3">
                 {users.map((user) => 
                 {
-                    console.log(user)
                     return (<button 
                         key={user._id}
                         onClick={()=>setSelectedUser(user._id)}
