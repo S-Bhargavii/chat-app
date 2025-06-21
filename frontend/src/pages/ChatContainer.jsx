@@ -4,6 +4,7 @@ import { useChatStore } from "../store/useChatStore"
 import { useEffect } from "react";
 import MessageSkeleton from "../components/skeletons/MessageSkeleton";
 import { useAuthStore } from "../store/useAuthStore";
+import { formatMessageTime } from "../lib/utils";
 
 const ChatContainer = () => {
   const {selectedUser, messages, getMessages, isMessagesLoading} = useChatStore();
@@ -47,7 +48,7 @@ const ChatContainer = () => {
             {/* show the time message was sent */}
             <div className="chat-header mb-1">
               <time className="text-xs opacity-50 ml-1">
-                {message.createdAt}
+                {formatMessageTime(message.createdAt)}
               </time>
             </div>
 
