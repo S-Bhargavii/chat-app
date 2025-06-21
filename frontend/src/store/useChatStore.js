@@ -48,7 +48,7 @@ export const useChatStore = create((set, get)=> ({
         // to read and write to the variable 
         try{
             // send the message to the backend api so that it can store in the database 
-            res = await axiosInstance.post(`/messages/send/${selectedUser._id}`, message);
+            const res = await axiosInstance.post(`/message/send/${selectedUser._id}`, message);
             // append the message to the list of messages in the frontend
             set({messages : [...messages, res.data]});
         } catch(error){

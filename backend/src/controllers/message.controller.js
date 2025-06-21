@@ -39,7 +39,6 @@ export const sendMessage = async(req, res) => {
         const {id:toUserId} = req.params;
         const fromUserId = req.user._id;
         const {text, image} = req.body;
-
         let imageUrl;
         if(image){
             // upload image to cloudinary 
