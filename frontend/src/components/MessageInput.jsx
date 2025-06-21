@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
 import { useChatStore } from '../store/useChatStore';
-import {X, Image} from "lucide-react";
+import {X, Image, Send} from "lucide-react";
 
 const MessageInput = () => {
   const [imagePreview, setimagePreview] = useState(null);
@@ -64,6 +64,13 @@ const MessageInput = () => {
             <Image size={20}/>
           </button>
         </div>
+        <button
+          type='submit'
+          className='btn btn-sm btn-circle'
+          disabled={!text.trim() && !imagePreview} // disable the button when there is no image or when there is no text
+        >
+          <Send size={22}/>
+        </button>
       </form>
 
     </div>
