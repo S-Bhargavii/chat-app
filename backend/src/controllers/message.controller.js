@@ -56,7 +56,7 @@ export const sendMessage = async(req, res) => {
 
         // to do : socket.io
         
-        return res.json(200).json(newMessage);
+        return res.status(200).json(newMessage);
     }catch(error){
         console.error("Error occured while sending images: ", error.message);
         return res.status(500).json({error: "Internal server error occured"});
