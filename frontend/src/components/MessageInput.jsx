@@ -1,20 +1,50 @@
 import { useState, useRef } from 'react'
 import { useChatStore } from '../store/useChatStore';
 import {X, Image, Send} from "lucide-react";
+import toast from 'react-hot-toast';
 
 const MessageInput = () => {
-  const [imagePreview, setimagePreview] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = useRef(null); // useRef to persist values between re-renders but don't cause re-renders upon change
   const [text, setText] = useState("");
   const {sendMessage} = useChatStore();
 
   const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if(!file.type.startsWith("image/")){
+      toast.error("Please select an image file");
+      return;
+    }
 
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImagePreview(reader.result); // the file is encoded base 64 and is stored in the imagePreview variable
+    }
+    reader.readAsDataURL(file);
   }
 
-  const removeImage = () => {};
+  const removeImage = () => {
+    setImagePreview(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
 
-  const handleSendMessage = () => {};
+  const handleSendMessage = async (e) => {
+    e.preventDefault(); // so normal ga form submit ayyinappudu -> it will send a GET api request -> this is to prevent that request from taking place
+    if(!text.trim() && !imagePreview) return;
+    try{
+      await sendMessage({
+        text: text.trim(),
+        image: imagePreview
+      })
+
+      // once the message is sent -> clear the inputs so that the user can send another msg
+      setText("");
+      setImagePreview(null);
+      if(fileInputRef.current) fileInputRef.current.value = "";
+    } catch(error){
+      console.log("Failed to send message : ", error);
+    }
+  };
 
   return (
 
