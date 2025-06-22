@@ -1,6 +1,7 @@
 import {create} from "zustand";
 import toast from "react-hot-toast";
 import {axiosInstance} from "../lib/axios";
+import {useAuthStore} from "./useAuthStore";
 
 // create is a function that is taking in a function as an argument 
 // so the create function will pass in the set and get args to the function 
@@ -58,5 +59,20 @@ export const useChatStore = create((set, get)=> ({
 
     setSelectedUser: (selectedUser) => {
         set({selectedUser})
+    }, 
+
+    subscribeToMessages : () => {
+        const {selectedUser} = get();
+        if(!selectedUser) return;
+
+        const socket = useAuthStore.getState().socket;
+        socket.on("newMessage", (newMessage)=>{
+            set({messages: [...get().messages, newMessage]});
+        })
+    }, 
+
+    unsubscribeFromMessages : () => {
+        const socket = useAuthStore.getState().socket;
+        socket.off("newMessage");
     }
 }))

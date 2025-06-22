@@ -1,6 +1,7 @@
 import User from "../models/user.model.js";
 import Message from "../models/message.model.js";
 import cloudinary from "../lib/cloudinary.js";
+import { io, getReceiverSocketId } from "../lib/socket.js";
 
 export const getUsersForSidebar = async(req, res) => {
     try{
@@ -54,7 +55,14 @@ export const sendMessage = async(req, res) => {
         })
         await newMessage.save(); // save to mongodb database
 
-        // to do : socket.io
+        const toSocketId = getReceiverSocketId(toUserId); // get the socket id of the user you are sending this message to 
+        if(toSocketId){
+            // you want to emit the message only to the person 
+            // that this message is being sent to
+            // adding to before emit ensures this 
+            // if there was no .to, this message will be sent to everyone
+            io.to(toSocketId).emit("newMessage", newMessage);
+        }
         
         return res.status(200).json(newMessage);
     }catch(error){

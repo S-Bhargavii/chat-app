@@ -12,8 +12,13 @@ const io = new Server(server, {
     }
 });
 
-// used to store online users
 const userSocketMap = {}; // {userId : socketId}
+
+export function getReceiverSocketId(userId){
+    return userSocketMap[userId];
+}
+
+// used to store online users
 
 // client emo .connect() pilichinappudu 
 // the server will get a "connection" event ala anamata 
