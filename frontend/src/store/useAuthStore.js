@@ -15,6 +15,7 @@ export const useAuthStore = create((set, get)=> ({
     isLoggingIn: false,
     isUpdatingProfile: false,
     isCheckingAuth: true,
+    onlineUsers: [],
     socket: null, 
 
     checkAuth: async() => {
@@ -97,10 +98,21 @@ export const useAuthStore = create((set, get)=> ({
         if(!authUser || get().socket?.connected) return; 
         // dont try to connect if the user is authenticated
         // dont try to connect if the user is connected again
-
-        const socket = io(BASE_URL)
+        
+        // send the user id in the query request params
+        const socket = io(BASE_URL, {
+            query: {
+                userId: authUser._id
+            }
+        })
         socket.connect()
         set({socket:socket});
+
+        // adds a listener function to the event (corresponding
+        // to the name) that is emitted
+        socket.on("getOnlineUsers", (userIds)=>{
+            set({onlineUsers: userIds});
+        })
     }, 
 
     disconnectSocket : () => {
