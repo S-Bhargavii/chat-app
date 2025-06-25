@@ -5,7 +5,7 @@ import {io} from "socket.io-client";
 // zustand is used for global state management
 // once we create the state here, we can use it 
 // in any other components that we need
-const BASE_URL = "http://localhost:5001" // this is the backend api 
+const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:5001/api" : "/api" // this is the backend api,,
 // because that is where the socket server is opened
 
 export const useAuthStore = create((set, get)=> ({
